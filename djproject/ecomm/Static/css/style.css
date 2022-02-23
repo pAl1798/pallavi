@@ -1,0 +1,19 @@
+.maindiv{
+    border:5px solid red;
+    margin-bottom: 5px;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: papayawhip;
+    display: flex;
+    justify-content: space-evenly;
+     /* width: 500px; */
+     /* height: 500px; */
+}
+.mydiv{
+    border: 5px solid green;
+
+} 
+.childdiv{
+    border: 5px solid red;
+}

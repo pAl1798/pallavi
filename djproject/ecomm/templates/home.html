@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load cart %}
+{% block title %}
+Home
+{% endblock title %}
+{% block content %}
+
+{% comment %} {% if error_msg %}
+<div class="modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="display: block;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h3>{{error_msg}}</h3>
+      </div>
+      <form action=" {% url 'home' %}" method = "post">
+          {% csrf_token %}
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Ok</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %} 
+
+  <table class="table table-striped|sm|bordered|hover|inverse table-inverse table-responsive" id= "myul">
+    <thead class="thead-inverse|thead-default">
+      
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Gender</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% for i in c %}
+        <tr>
+          <td scope ="row"><a href = "#">{{i.firstname}}</a></td>
+          <td><a href = "#">{{i.lastname}}</a></td>
+          <td><a href = "#">{{i.email}}</a></td>
+          <td><a href = "#">{{i.gender}}</a></td>
+        </tr>
+         {% endfor %}
+      </tbody>
+  </table>
+   {% endcomment %}
+ 
+   <div class="container">
+
+
+    <div class="row mx-auto">
+
+          {% comment %} filter category {% endcomment %}
+          <div class="col-lg-3">
+                {% comment %} <div class="list-group">
+                  {% for cate in cat %}
+                  <a href="/home/?category={{cate.id}}" class="list-group-item list-group-item-action">{{cate.name}}</a>
+                  {% endfor %}
+                </div> {% endcomment %}
+
+
+                <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    Choose Catrgory
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    
+      
+      {% for cate in cat %}
+      <li>
+                  <a href="/home/?category={{cate.id}}" class="list-group-item list-group-item-action">{{cate.name}}</a>
+                  </li>
+                  {% endfor %}
+  </ul>
+</div>
+
+
+          </div>
+
+          {% comment %} Product category {% endcomment %}
+
+          <div class="col-lg-9 mx-auto" id = "products">
+            <div class="row my-3 mx-auto">
+              {% for product in products  %}
+              <div class="card mx-auto mb-3"  style="width: 18rem;">
+                <img src="{{product.image.url}}" class="card-img-top mx-auto" height =200 alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">{{product.name}}</h5>
+                  <p class="card-text">Rs.{{product.price}}</p>
+                </div>
+                  <div class="card-footer row no-gutter">
+
+                        {% comment %} add to cart quant {% endcomment %} 
+                        {% if product|isexistincart:request.session.cart%}
+                        <div class="row">
+                            <form action="/home/#{{product.id}}" method="post" class="col-2">
+                                {% csrf_token %}
+                                <input type="text" name="cartid" value="{{product.id}}" hidden>
+                                <input type="text" name="minus" value="True" hidden>
+                                <input type="submit" value="-" class="btn btn-block btn-dark">
+                            </form>
+                            <div class="text-center col">{{product|cartquantity:request.session.cart}}
+
+                            </div>
+                            <form action="/home/#{{product.id}}" method="post" class="col-2">
+                                {% csrf_token %}
+                                <input type="text" name="cartid" value="{{product.id}}" hidden>
+                                <input type="submit" value="+" class="btn btn-block btn-dark">
+                            </form>
+                        </div>
+                        {% else %}
+                        <form action="#{{product.id}}" method="post" class="btn-block">
+                            {% csrf_token %}
+                            <input type="text" name="cartid" value="{{product.id}}" hidden>
+                            <input type="submit" class="btn btn-block btn-primary form-control " value="Add to cart">
+                        </form>
+                        {% endif %}
+                    </div>
+              </div>
+              {% endfor %}
+              </div>
+                  
+              </div>
+          </div>
+
+
+
+    </div>
+
+   </div>
+   
+
+{% endblock content %}
